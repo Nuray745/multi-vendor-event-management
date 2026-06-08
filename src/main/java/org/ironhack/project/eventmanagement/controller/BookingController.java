@@ -25,19 +25,21 @@ public class BookingController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER')")
     public BookingResponse createBooking(@Valid @RequestBody CreateBookingRequest request) {
         Booking booking = bookingService.createBooking(request);
         return bookingMapper.toResponse(booking);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER')")
     public BookingResponse getBooking(@PathVariable Long id) {
         Booking booking = bookingService.getById(id);
         return bookingMapper.toResponse(booking);
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER')")
     public List<BookingResponse> getAll() {
         return bookingService.getAll()
                 .stream()
